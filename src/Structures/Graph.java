@@ -18,7 +18,7 @@ public class Graph {
         }
     }
 
-    void addEdge(int v, int w) {
+    public void addEdge(int v, int w) {
         adj[v].add(w);
         adj[w].add(v);
     }
@@ -97,7 +97,7 @@ public class Graph {
 
     //}
 
-    public class DFSPath {
+    public static class DFSPath {
         private boolean[] marked;
         private int[] edgeTo;
         private int s;
@@ -133,7 +133,7 @@ public class Graph {
         }
     }
 
-    public class BFSPath {
+    public static class BFSPath {
         private boolean[] marked;
         private int[] edgeTo;
         private int[] distanceTo;
@@ -155,13 +155,32 @@ public class Graph {
             queue.add(s);
 
             while (!queue.isEmpty()) {
-                //do it with Queue, then add others until queue is empty
-                // then you have got short distances from original vertex to any other adjacent one
+                int v = queue.remove();
+                for (int w : graph.adj(v)) {
+                    if (!marked[w]) {
+                        queue.add(w);
+                        marked[w] = true;
+                        edgeTo[w] = v;
+                        distanceTo[w] = distanceTo[v] + 1;
+                    }
+                }
             }
+        }
+
+        public boolean hasPathTo(int w) { return marked[w]; }
+
+        public Iterable<Integer> path(int w) {
+            if (!hasPathTo(w)) return null;
+            Stack<Integer> stack = new Stack<>();
+            for (int i = w; i != s; i = edgeTo[i]) {
+                stack.push(i);
+            }
+            stack.push(s);
+            return stack;
         }
     }
 
-    public class CC {
+    public static class CC {
         private boolean[] marked;
         private int[] id;
         private int count;

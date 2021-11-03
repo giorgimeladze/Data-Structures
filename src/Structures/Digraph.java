@@ -27,6 +27,23 @@ public class Digraph {
         return adj[v];
     }
 
+    public Digraph reverse() {
+        Digraph reverse = new Digraph(V);
+        for (int v = 0; v < V; v++) {
+            for (int w : adj(v))
+                reverse.addEdge(w,v);
+        }
+        return reverse;
+    }
+
+    public void print() {
+        for (int v = 0; v < V; v++) {
+            for (int w : adj[v])
+                System.out.print(v + "-" + w + "; ");
+        }
+        System.out.println();
+    }
+
     public int degree(int v) {
         int degree = 0;
         for (int w : adj[v])
@@ -42,7 +59,7 @@ public class Digraph {
         return edges;
     }
 
-    public class DFSPath {
+    public static class DFSPath {
         private boolean[] marked;
         private int[] edgeTo;
         private int s;
@@ -78,7 +95,7 @@ public class Digraph {
         }
     }
 
-    public class TopologicalSort {
+    public static class TopologicalSort {
         private boolean[] marked;
         private Stack<Integer> reversePost;
 
@@ -104,23 +121,24 @@ public class Digraph {
         }
     }
 
-    public class KosarajuSharirCC {
+    public static class KosarajuSharirCC {
         private boolean[] marked;
         private int[] id;
         private int count;
 
-//        public KosarajuSharirCC(Digraph G) {
-//            marked = new boolean[G.V()];
-//            id = new int[G.V()];
-//            count = 1;
-//            TopologicalSort ts = new TopologicalSort(G.reverse());
-//            for (int v : ts.reversePost()) {
-//                if (!marked[v]){
-//                    dfs(G, v);
-//                    count++;
-//                }
-//            }
-//        }
+        public KosarajuSharirCC(Digraph G) {
+            marked = new boolean[G.V()];
+            id = new int[G.V()];
+            count = 1;
+            TopologicalSort ts = new TopologicalSort(G.reverse());
+            while (!ts.reversePost.empty()) {
+                int v = ts.reversePost.pop();
+                if (!marked[v]) {
+                    dfs(G, v);
+                    count++;
+                }
+            }
+        }
 
         private void dfs (Digraph G, int v) {
             marked[v] = true;
@@ -129,6 +147,8 @@ public class Digraph {
                 if (!marked[w])
                     dfs(G, w);
         }
+
+        public int[] getId() { return id; }
 
         public boolean stronglyConnected (int v, int w) {
             return id[v] == id[w];

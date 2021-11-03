@@ -17,7 +17,7 @@ public class BST<E extends Comparable<E>> implements Iterable<E> {
      * */
     public BST(E[] objects) {
         for (int i = 0; i < objects.length; i++) {
-            insert(objects[i]);
+            put(objects[i]);
         }
     }
 
@@ -56,7 +56,7 @@ public class BST<E extends Comparable<E>> implements Iterable<E> {
      * @return true if element is inserted successfully
      * @return false if element already exists in binary tree
      * */
-    public boolean insert(E e) {
+    public boolean put(E e) {
         if (isEmpty()) {
             root = new TreeNode(e);
             size++;
